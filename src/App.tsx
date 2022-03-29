@@ -1,7 +1,12 @@
-import "./App.css";
+// import view
+import Landing from "./views/Landing";
 
 function App() {
-  return <div className="App">Pub Quizzle</div>;
+  return (
+    <div className="App">
+      <Landing />
+    </div>
+  );
 }
 
 export default App;
