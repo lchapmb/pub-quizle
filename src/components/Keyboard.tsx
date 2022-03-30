@@ -5,15 +5,13 @@ import PublishIcon from "@mui/icons-material/Publish";
 
 export default function Keyboard() {
   const qwerty = [
-    ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-    ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-    [<BackspaceIcon />, "z", "x", "c", "v", "b", "n", "m", <PublishIcon />],
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "E", "R", "F", "G", "H", "J", "K", "L"],
+    [<BackspaceIcon />, "Z", "X", "C", "V", "B", "N", "M", <PublishIcon />],
   ];
 
-  //   const row = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
-
   return (
-    <Container>
+    <Container disableGutters>
       {qwerty.map((row) => (
         <Box
           component="form"
