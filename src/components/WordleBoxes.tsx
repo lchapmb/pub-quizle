@@ -1,7 +1,8 @@
+// imports for MUI
 import { Container, Box, TextField } from "@mui/material";
 
 export default function WordleBoxes() {
-  const word = "abcdefg";
+  const word = "hello";
   const wordArr = word.split("");
 
   return (
