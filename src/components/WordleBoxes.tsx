@@ -8,8 +8,8 @@ import { useLettersContext } from "../views/Landing";
 import { Container, Box, TextField } from "@mui/material";
 
 export default function WordleBoxes() {
-  const { displayGrid, letterBackgroundColor } = useLettersContext();
-  const [currentRow] = useState(0);
+  const { displayGrid, letterBackgroundColor, currentRow } =
+    useLettersContext();
 
   return (
     <Container>
@@ -22,9 +22,9 @@ export default function WordleBoxes() {
           }}
           noValidate
           autoComplete="off"
-          key={index}
+          key={`row_${index}`}
         >
-          {row.map((letter: string, index: number) => (
+          {row.map((letter: string, ii: number) => (
             <TextField
               id="outlined-basic"
               variant="outlined"
@@ -34,7 +34,7 @@ export default function WordleBoxes() {
                   index === currentRow ? "" : letterBackgroundColor(letter),
               }}
               size="small"
-              key={index}
+              key={`letter_${ii}`}
               disabled
               value={letter}
             />

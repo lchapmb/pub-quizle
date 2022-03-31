@@ -6,10 +6,10 @@ import LetterModel from "../models/LetterModel";
 
 // imports for MUI
 import { Container, Box, Avatar, Button } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { blue, red, green, orange } from "@mui/material/colors";
 
 export default function Keyboard() {
-  const { letters, handleLetterClick, handleDeleteLastLetter } =
+  const { letters, handleLetterClick, handleDeleteLastLetter, handleSubmit } =
     useLettersContext();
 
   function HandleKeyClick(letter: LetterModel) {
@@ -33,7 +33,15 @@ export default function Keyboard() {
           {row.map((letter, index) => (
             <Avatar
               variant="square"
-              sx={{ m: 0.5, width: 24, height: 24, bgcolor: blue[500] }}
+              sx={
+                letter.isWrong
+                  ? { m: 0.5, width: 24, height: 24, bgcolor: red[500] }
+                  : letter.isCorrect
+                  ? { m: 0.5, width: 24, height: 24, bgcolor: green[500] }
+                  : letter.isUsed
+                  ? { m: 0.5, width: 24, height: 24, bgcolor: orange[500] }
+                  : { m: 0.5, width: 24, height: 24, bgcolor: blue[500] }
+              }
               key={index}
               onClick={() => {
                 if (!letter.isWrong) {
@@ -56,7 +64,9 @@ export default function Keyboard() {
         noValidate
         autoComplete="off"
       >
-        <Button variant="contained">Submit</Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          Submit
+        </Button>
         <Button variant="contained" onClick={handleDeleteLastLetter}>
           Delete
         </Button>

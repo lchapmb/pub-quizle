@@ -24,6 +24,9 @@ export type LettersContent = {
   displayGrid: string[][];
   letterBackgroundColor: (letter: string) => string;
   handleDeleteLastLetter: () => void;
+  handleSubmit: () => void;
+  errorMessage: string;
+  currentRow: number;
 };
 
 // create context
@@ -34,6 +37,9 @@ export const LettersContext = createContext<LettersContent>({
   displayGrid: [],
   letterBackgroundColor: () => "",
   handleDeleteLastLetter: () => {},
+  handleSubmit: () => {},
+  errorMessage: "",
+  currentRow: 0,
 });
 
 // export use context
@@ -41,7 +47,7 @@ export const useLettersContext = () => useContext(LettersContext);
 
 export default function Landing() {
   const [targetWord, setTargetWord] = useState("");
-  // const [targetPub, setTargetPub] = useState("");
+  const [targetPub, setTargetPub] = useState("");
   const [displayGrid, setDisplayGrid] = useState(
     [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
   );
@@ -50,7 +56,7 @@ export default function Landing() {
 
   const qwerty = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-    ["A", "E", "R", "F", "G", "H", "J", "K", "L"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
     ["Z", "X", "C", "V", "B", "N", "M"],
   ];
 
@@ -60,17 +66,15 @@ export default function Landing() {
 
   useEffect(() => {
     QuizzleController.generateQuizzleWord().then((word) => {
-      setTargetWord(word);
-      return;
+      setTargetWord(word.toUpperCase());
     });
 
-    // QuizzleController.generatePubName().then((name) => {
-    //   setTargetPub(name);
-    // });
+    QuizzleController.generatePubName().then((name) => {
+      setTargetPub(name);
+    });
   }, []);
 
   const handleLetterClick = (letter: LetterModel) => {
-    console.log(letter);
     let tempArr = [...displayGrid];
     for (let i = 0; i < tempArr[currentRow].length; i++) {
       const col = tempArr[currentRow][i];
@@ -79,13 +83,18 @@ export default function Landing() {
         break;
       }
     }
-    console.log(tempArr);
     setDisplayGrid(tempArr);
   };
 
   const letterBackgroundColor = (letter: string) => {
     const allLetters = letters[0].concat(letters[1], letters[2]);
     const letterModel = allLetters.find((l) => l.letter === letter);
+    // console.log({
+    //   allLetters,
+    //   letterModel,
+    //   letter,
+    // });
+
     if (letterModel) {
       if (letterModel.isWrong) return red[500];
       if (letterModel.isCorrect) return green[500];
@@ -106,6 +115,7 @@ export default function Landing() {
   };
 
   const setLetterAsUsed = (isUsedBool: boolean, gLetter: string) => {
+    console.log(gLetter);
     setLetters(
       letters.map((lettersRow) =>
         lettersRow.map((letter: LetterModel) => {
@@ -121,6 +131,7 @@ export default function Landing() {
   };
 
   const handleSubmit = async () => {
+    // check current row is complete
     let tempArr = [...displayGrid];
     for (let i = 0; i < tempArr[currentRow].length; i++) {
       const col = tempArr[currentRow][i];
@@ -131,6 +142,75 @@ export default function Landing() {
     }
 
     let guessString = displayGrid[currentRow].join("");
+
+    //check current word is an actual word
+    const isWord = await QuizzleController.checkIfStringIsWord(guessString);
+
+    if (!isWord) {
+      setErrorMessage("That is not a word, your guess must be an actual word");
+      return null;
+    }
+
+    // check each letter relates to current guess row
+    for (let l = 0; l < guessString.split("").length; l++) {
+      let gLetter = guessString.split("")[l];
+      let isCorrect = false;
+      let isUsedBool = false;
+      if (gLetter === targetWord.split("")[l]) {
+        // check letter is correct and in correct position
+        setLetters(
+          letters.map((row) =>
+            row.map((letter) => {
+              if (letter.letter === gLetter) {
+                letter.isCorrect = true;
+                isCorrect = true;
+              }
+              return letter;
+            })
+          )
+        );
+      } else {
+        // check letter is correct but in wrong place
+        for (let ti = 0; ti < targetWord.split("").length; ti++) {
+          const targetLetter = targetWord.split("")[ti];
+          if (gLetter === targetLetter) {
+            isUsedBool = setLetterAsUsed(isUsedBool, gLetter);
+          }
+        }
+      }
+      if (!isCorrect && !isUsedBool) {
+        // the letter is wrong and unused
+        setLetters(
+          letters.map((row) =>
+            row.map((letter) => {
+              if (letter.letter === gLetter) {
+                letter.isWrong = true;
+              }
+              return letter;
+            })
+          )
+        );
+      }
+    }
+
+    // check guessed word is target word
+    if (guessString === targetWord) {
+      // the word is correct
+      setErrorMessage(`WINNER! Next stop: ${targetPub}`);
+      setCurrentRow(currentRow + 1);
+      return null;
+    }
+
+    // increment the current row
+    setCurrentRow(currentRow + 1);
+
+    // check if the current row is the last row
+    if (currentRow === displayGrid.length - 1) {
+      setErrorMessage("You have not won this time...");
+      return null;
+    }
+
+    setErrorMessage("");
   };
 
   return (
@@ -143,6 +223,9 @@ export default function Landing() {
           displayGrid,
           letterBackgroundColor,
           handleDeleteLastLetter,
+          handleSubmit,
+          errorMessage,
+          currentRow,
         }}
       >
         <Nav />

@@ -1,6 +1,13 @@
+// import context
+import { useLettersContext } from "../views/Landing";
+
+// imports for mui
 import { Container, Box, Typography, Divider } from "@mui/material";
 
 export default function Feedback() {
+  const { errorMessage } = useLettersContext();
+  const startMsg =
+    "Guess the WORDLE in six tries. Each guess must be a valid work. Hit submit to guess. After each guess, the color of the tiles change to show how close your guess was to the word.";
   return (
     <Container>
       <Divider />
@@ -13,9 +20,7 @@ export default function Feedback() {
         }}
       >
         <Typography variant="body2">
-          Guess the WORDLE in six tries. Each guess must be a valid work. Hit
-          submit to guess. After each guess, the color fo the tiles change to
-          show how close your guess was to the word.
+          {errorMessage ? errorMessage : startMsg}
         </Typography>
       </Box>
     </Container>

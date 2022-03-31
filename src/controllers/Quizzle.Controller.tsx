@@ -16,4 +16,28 @@ export abstract class QuizzleController {
     //   const pub = res.data.files.pub.content;
     return "Costello's";
   };
+
+  static checkIfStringIsWord = async (word: string) => {
+    if (!word) return false;
+
+    word = word.toLowerCase();
+
+    if (word.includes(" ")) word = word.split(" ")[0];
+
+    const res = await axios.get(
+      `https://api.datamuse.com/words?sp=${word}&md=d&max=1`
+    );
+
+    if (res.data.length === 0) return false;
+
+    let isWord = false;
+
+    for (let i = 0; i < res.data.length; i++) {
+      if (res.data[i].word === word) {
+        isWord = true;
+        break;
+      }
+    }
+    return isWord;
+  };
 }
