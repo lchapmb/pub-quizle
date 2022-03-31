@@ -1,7 +1,7 @@
-// react import
-import { useEffect, useState } from "react";
+// import context
+import { useLettersContext } from "../views/Landing";
 
-// model import
+// import model
 import LetterModel from "../models/LetterModel";
 
 // imports for MUI
@@ -9,15 +9,12 @@ import { Container, Box, Avatar, Button } from "@mui/material";
 import { blue } from "@mui/material/colors";
 
 export default function Keyboard() {
-  const qwerty = [
-    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-    ["A", "E", "R", "F", "G", "H", "J", "K", "L"],
-    ["Z", "X", "C", "V", "B", "N", "M"],
-  ];
+  const { letters, handleLetterClick, handleDeleteLastLetter } =
+    useLettersContext();
 
-  const [letters, setLetters] = useState(
-    qwerty.map((row) => row.map((letter) => new LetterModel(letter)))
-  );
+  function HandleKeyClick(letter: LetterModel) {
+    handleLetterClick(letter);
+  }
 
   return (
     <Container disableGutters>
@@ -38,6 +35,11 @@ export default function Keyboard() {
               variant="square"
               sx={{ m: 0.5, width: 24, height: 24, bgcolor: blue[500] }}
               key={index}
+              onClick={() => {
+                if (!letter.isWrong) {
+                  HandleKeyClick(letter);
+                }
+              }}
             >
               {letter.letter}
             </Avatar>
@@ -55,7 +57,9 @@ export default function Keyboard() {
         autoComplete="off"
       >
         <Button variant="contained">Submit</Button>
-        <Button variant="contained">Delete</Button>
+        <Button variant="contained" onClick={handleDeleteLastLetter}>
+          Delete
+        </Button>
       </Box>
     </Container>
   );

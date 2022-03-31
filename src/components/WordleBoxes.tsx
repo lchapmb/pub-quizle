@@ -1,16 +1,15 @@
 // react import
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+// import context
+import { useLettersContext } from "../views/Landing";
 
 // imports for MUI
 import { Container, Box, TextField } from "@mui/material";
-import { useAnswerContext } from "../views/Landing";
 
 export default function WordleBoxes() {
-  const { targetWord } = useAnswerContext();
-  const [displayGrid, setDisplayGrid] = useState(
-    [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
-  );
-  const [currentRow, setCurrentRow] = useState(0);
+  const { displayGrid, letterBackgroundColor } = useLettersContext();
+  const [currentRow] = useState(0);
 
   return (
     <Container>
@@ -31,13 +30,14 @@ export default function WordleBoxes() {
               variant="outlined"
               sx={{
                 m: 0.5,
+                bgcolor:
+                  index === currentRow ? "" : letterBackgroundColor(letter),
               }}
               size="small"
               key={index}
               disabled
-            >
-              {letter}
-            </TextField>
+              value={letter}
+            />
           ))}
         </Box>
       ))}
