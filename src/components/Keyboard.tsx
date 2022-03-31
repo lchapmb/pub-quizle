@@ -11,7 +11,7 @@ export default function Keyboard() {
 
   return (
     <Container disableGutters>
-      {qwerty.map((row) => (
+      {qwerty.map((row, index) => (
         <Box
           component="form"
           sx={{
@@ -21,24 +21,16 @@ export default function Keyboard() {
           }}
           noValidate
           autoComplete="off"
+          key={index}
         >
-          {row.map((letter) => (
-            <Box
-              component="form"
-              sx={{
-                m: 0.5,
-                display: "flex",
-              }}
-              noValidate
-              autoComplete="off"
+          {row.map((letter, index) => (
+            <Avatar
+              variant="square"
+              sx={{ m: 0.5, width: 24, height: 24, bgcolor: blue[500] }}
+              key={index}
             >
-              <Avatar
-                variant="square"
-                sx={{ m: 0.2, width: 24, height: 24, bgcolor: blue[500] }}
-              >
-                {letter}
-              </Avatar>
-            </Box>
+              {letter}
+            </Avatar>
           ))}
         </Box>
       ))}
