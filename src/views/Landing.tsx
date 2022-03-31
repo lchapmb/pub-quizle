@@ -2,6 +2,7 @@
 import Nav from "../components/Nav";
 import WordleBoxes from "../components/WordleBoxes";
 import Keyboard from "../components/Keyboard";
+import Feedback from "../components/Feedback";
 
 export default function Landing() {
   return (
@@ -9,6 +10,7 @@ export default function Landing() {
       <Nav />
       <WordleBoxes />
       <Keyboard />
+      <Feedback />
     </>
   );
 }
