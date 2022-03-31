@@ -1,6 +1,3 @@
-// react import
-import { useState } from "react";
-
 // import context
 import { useLettersContext } from "../views/Landing";
 
