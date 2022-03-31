@@ -1,30 +1,16 @@
 // react import
 import { useEffect, useState } from "react";
 
-// controller import
-import { QuizzleController } from "../controllers/Quizzle.Controller";
-
-// model import
-import LetterModel from "../models/LetterModel";
-
 // imports for MUI
 import { Container, Box, TextField } from "@mui/material";
+import { useAnswerContext } from "../views/Landing";
 
 export default function WordleBoxes() {
-  const [targetWord, setTargetWord] = useState("");
+  const { targetWord } = useAnswerContext();
   const [displayGrid, setDisplayGrid] = useState(
     [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
   );
   const [currentRow, setCurrentRow] = useState(0);
-  const [letters, setLetters] = useState<LetterModel[]>();
-
-  useEffect(() => {
-    QuizzleController.generateQuizzleWord().then((word) => {
-      setTargetWord(word);
-      return;
-    });
-    console.log(targetWord);
-  }, []);
 
   return (
     <Container>
