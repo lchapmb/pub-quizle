@@ -1,3 +1,9 @@
+// react import
+import { useEffect, useState } from "react";
+
+// controller import
+import { QuizzleController } from "../controllers/Quizzle.Controller";
+
 // imports for MUI
 import { Container, Box, TextField } from "@mui/material";
 
@@ -7,9 +13,22 @@ export default function WordleBoxes() {
   const guesses = "abcdef";
   const guessesArr = guesses.split("");
 
+  const [targetWord, setTargetWord] = useState("");
+  const [displayGrid, setDisplayGrid] = useState(
+    [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
+  );
+
+  useEffect(() => {
+    QuizzleController.generateQuizzleWord().then((word) => {
+      setTargetWord(word);
+      return;
+    });
+    console.log(targetWord);
+  }, []);
+
   return (
     <Container>
-      {guessesArr.map((guess) => (
+      {displayGrid.map((row, index) => (
         <Box
           component="form"
           sx={{
@@ -18,19 +37,20 @@ export default function WordleBoxes() {
           }}
           noValidate
           autoComplete="off"
-          key={guess}
+          key={index}
         >
-          {wordArr.map((letter, index) => (
+          {row.map((letter: string, index: number) => (
             <TextField
               id="outlined-basic"
               variant="outlined"
-              label={letter}
               sx={{
                 m: 0.5,
               }}
               size="small"
               key={index}
-            />
+            >
+              {letter}
+            </TextField>
           ))}
         </Box>
       ))}
