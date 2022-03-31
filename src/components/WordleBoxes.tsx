@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 // controller import
 import { QuizzleController } from "../controllers/Quizzle.Controller";
 
+// model import
+import LetterModel from "../models/LetterModel";
+
 // imports for MUI
 import { Container, Box, TextField } from "@mui/material";
 
 export default function WordleBoxes() {
-  const word = "hello";
-  const wordArr = word.split("");
-  const guesses = "abcdef";
-  const guessesArr = guesses.split("");
-
   const [targetWord, setTargetWord] = useState("");
   const [displayGrid, setDisplayGrid] = useState(
     [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
   );
+  const [currentRow, setCurrentRow] = useState(0);
+  const [letters, setLetters] = useState<LetterModel[]>();
 
   useEffect(() => {
     QuizzleController.generateQuizzleWord().then((word) => {
@@ -48,6 +48,7 @@ export default function WordleBoxes() {
               }}
               size="small"
               key={index}
+              disabled
             >
               {letter}
             </TextField>

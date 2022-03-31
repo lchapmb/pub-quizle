@@ -1,3 +1,9 @@
+// react import
+import { useEffect, useState } from "react";
+
+// model import
+import LetterModel from "../models/LetterModel";
+
 // imports for MUI
 import { Container, Box, Avatar, Button } from "@mui/material";
 import { blue } from "@mui/material/colors";
@@ -9,9 +15,13 @@ export default function Keyboard() {
     ["Z", "X", "C", "V", "B", "N", "M"],
   ];
 
+  const [letters, setLetters] = useState(
+    qwerty.map((row) => row.map((letter) => new LetterModel(letter)))
+  );
+
   return (
     <Container disableGutters>
-      {qwerty.map((row, index) => (
+      {letters.map((row, index) => (
         <Box
           component="form"
           sx={{
@@ -29,7 +39,7 @@ export default function Keyboard() {
               sx={{ m: 0.5, width: 24, height: 24, bgcolor: blue[500] }}
               key={index}
             >
-              {letter}
+              {letter.letter}
             </Avatar>
           ))}
         </Box>
