@@ -49,7 +49,7 @@ export default function Landing() {
   const [targetWord, setTargetWord] = useState("");
   const [targetPub, setTargetPub] = useState("");
   const [displayGrid, setDisplayGrid] = useState(
-    [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
+    [0, 1, 2, 3, 4, 5].map(() => [0, 1, 2, 3, 4].map(() => ""))
   );
   const [currentRow, setCurrentRow] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
@@ -89,11 +89,6 @@ export default function Landing() {
   const letterBackgroundColor = (letter: string) => {
     const allLetters = letters[0].concat(letters[1], letters[2]);
     const letterModel = allLetters.find((l) => l.letter === letter);
-    // console.log({
-    //   allLetters,
-    //   letterModel,
-    //   letter,
-    // });
 
     if (letterModel) {
       if (letterModel.isWrong) return red[500];
