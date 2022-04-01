@@ -16,6 +16,7 @@ export default function WordleBoxes() {
           sx={{
             m: 0.5,
             display: "flex",
+            justifyContent: "center",
           }}
           noValidate
           autoComplete="off"
@@ -29,6 +30,7 @@ export default function WordleBoxes() {
                 m: 0.5,
                 bgcolor:
                   index === currentRow ? "" : letterBackgroundColor(letter),
+                maxWidth: 60,
               }}
               size="small"
               key={`letter_${ii}`}
