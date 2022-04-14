@@ -22,7 +22,6 @@ export type LettersContent = {
   targetWord: string;
   handleLetterClick: (letter: LetterModel) => void;
   displayGrid: string[][];
-  letterBackgroundColor: (letter: string) => string;
   handleDeleteLastLetter: () => void;
   handleSubmit: () => void;
   errorMessage: string;
@@ -35,7 +34,6 @@ export const LettersContext = createContext<LettersContent>({
   targetWord: "",
   handleLetterClick: () => {},
   displayGrid: [],
-  letterBackgroundColor: () => "",
   handleDeleteLastLetter: () => {},
   handleSubmit: () => {},
   errorMessage: "",
@@ -49,7 +47,7 @@ export default function Landing() {
   const [targetWord, setTargetWord] = useState("");
   const [targetPub, setTargetPub] = useState("");
   const [displayGrid, setDisplayGrid] = useState(
-    [0, 1, 2, 3, 4].map(() => [0, 1, 2, 3, 4].map(() => ""))
+    [0, 1, 2, 3, 4, 5].map(() => [0, 1, 2, 3, 4].map(() => ""))
   );
   const [currentRow, setCurrentRow] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
@@ -84,23 +82,6 @@ export default function Landing() {
       }
     }
     setDisplayGrid(tempArr);
-  };
-
-  const letterBackgroundColor = (letter: string) => {
-    const allLetters = letters[0].concat(letters[1], letters[2]);
-    const letterModel = allLetters.find((l) => l.letter === letter);
-    // console.log({
-    //   allLetters,
-    //   letterModel,
-    //   letter,
-    // });
-
-    if (letterModel) {
-      if (letterModel.isWrong) return red[500];
-      if (letterModel.isCorrect) return green[500];
-      if (letterModel.isUsed) return orange[500];
-    }
-    return "";
   };
 
   const handleDeleteLastLetter = async () => {
@@ -141,6 +122,8 @@ export default function Landing() {
       }
     }
 
+    console.log(displayGrid[currentRow]);
+
     let guessString = displayGrid[currentRow].join("");
 
     //check current word is an actual word
@@ -156,14 +139,17 @@ export default function Landing() {
       let gLetter = guessString.split("")[l];
       let isCorrect = false;
       let isUsedBool = false;
+      const guessId = `guess_${currentRow}_${l}`;
+      const guessBox = document.getElementById(guessId);
       if (gLetter === targetWord.split("")[l]) {
         // check letter is correct and in correct position
         setLetters(
-          letters.map((row) =>
-            row.map((letter) => {
+          letters.map((row, i) =>
+            row.map((letter, ii) => {
               if (letter.letter === gLetter) {
                 letter.isCorrect = true;
                 isCorrect = true;
+                if (guessBox) guessBox.style.backgroundColor = green[500];
               }
               return letter;
             })
@@ -175,6 +161,7 @@ export default function Landing() {
           const targetLetter = targetWord.split("")[ti];
           if (gLetter === targetLetter) {
             isUsedBool = setLetterAsUsed(isUsedBool, gLetter);
+            if (guessBox) guessBox.style.backgroundColor = orange[500];
           }
         }
       }
@@ -185,6 +172,7 @@ export default function Landing() {
             row.map((letter) => {
               if (letter.letter === gLetter) {
                 letter.isWrong = true;
+                if (guessBox) guessBox.style.backgroundColor = red[500];
               }
               return letter;
             })
@@ -221,7 +209,6 @@ export default function Landing() {
           targetWord,
           handleLetterClick,
           displayGrid,
-          letterBackgroundColor,
           handleDeleteLastLetter,
           handleSubmit,
           errorMessage,

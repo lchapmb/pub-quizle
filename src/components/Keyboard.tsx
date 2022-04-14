@@ -59,15 +59,19 @@ export default function Keyboard() {
         sx={{
           m: 0.5,
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "center",
         }}
         noValidate
         autoComplete="off"
       >
-        <Button variant="contained" onClick={handleSubmit}>
+        <Button variant="contained" onClick={handleSubmit} sx={{ mr: 8 }}>
           Submit
         </Button>
-        <Button variant="contained" onClick={handleDeleteLastLetter}>
+        <Button
+          variant="contained"
+          onClick={handleDeleteLastLetter}
+          sx={{ ml: 8 }}
+        >
           Delete
         </Button>
       </Box>
