@@ -5,8 +5,7 @@ import { useLettersContext } from "../views/Landing";
 import { Container, Box, TextField } from "@mui/material";
 
 export default function WordleBoxes() {
-  const { displayGrid, letterBackgroundColor, currentRow } =
-    useLettersContext();
+  const { displayGrid } = useLettersContext();
 
   return (
     <Container>
@@ -24,12 +23,11 @@ export default function WordleBoxes() {
         >
           {row.map((letter: string, ii: number) => (
             <TextField
-              id="outlined-basic"
+              id={`guess_${index}_${ii}`}
               variant="outlined"
               sx={{
                 m: 0.5,
-                bgcolor:
-                  index === currentRow ? "" : letterBackgroundColor(letter),
+                bgcolor: "",
                 maxWidth: 60,
               }}
               size="small"
