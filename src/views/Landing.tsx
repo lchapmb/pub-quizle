@@ -122,8 +122,6 @@ export default function Landing() {
       }
     }
 
-    console.log(displayGrid[currentRow]);
-
     let guessString = displayGrid[currentRow].join("");
 
     //check current word is an actual word
